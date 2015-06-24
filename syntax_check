@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+
+$output = `git status -s`;
+
+$files_inspected = [];
+
+foreach (explode("\n", $output) as $line) {
+    $line = preg_replace('/\s+/', ' ', trim($line));
+
+    if (preg_match('/^[RMA]/', $line) && preg_match('/\.php$/', $line)) {
+        $line_parts = explode(' ', $line);
+        $file = $line_parts[count($line_parts) - 1];
+
+        if (isset($files_inspected[$file])) {
+            continue;
+        }
+
+        $files_inspected[$file] = true;
+
+        echo "Checking $file... ";
+        $status = `php -l $file 2>&1`;
+
+        if (preg_match('/^No syntax errors detected/', $status)) {
+            echo "Ok.\n";
+        } else {
+            echo "Has errors:\n$status";
+        }
+    }
+}
