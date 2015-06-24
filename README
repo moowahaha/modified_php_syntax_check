@@ -1,0 +1,6 @@
+Quick, lazy PHP script to syntax check modified PHP files in a git repo.
+
+Running 'php -l' is all the testing you will ever need, right?
+
+You're welcome, world. You're welcome.
+
